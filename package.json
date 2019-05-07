@@ -16,7 +16,7 @@
   "bugs": {
     "url": "https://github.com/Devanm15/w2d2/issues"
   },
-  "homepage": "https://github.com/Devanm15/w2d2#readme",
+  "homepage": "https://github.com/Devanm15/w2d2#express_server",
   "dependencies": {
     "ejs": "^2.6.1",
     "express": "^4.16.4"
