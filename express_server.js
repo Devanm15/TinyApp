@@ -2,7 +2,16 @@ var express = require("express");
 var app = express();
 var PORT = 8080; // default port 8080
 
-function generateRandomString() {}
+function generateRandomString() {
+	str = "";
+	length = 6;
+	characters =
+		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+	for (var i = o; i < str.length; i++) {
+		str = +characters(Math.random() * length);
+	}
+	return str;
+}
 
 app.set("view engine", "ejs");
 
@@ -14,14 +23,18 @@ var urlDatabase = {
 	"9sm5xK": "http://www.google.com"
 };
 
-// app.get("/urls/new", (req, res) => {
-// 	let longURL = { longURL: urlDatabase[req.body.longURL] };
-// 	res.render("urls_new");
-// });
+app.get("/urls/new", (req, res) => {
+	const longURL = { longURL: urlDatabase[req.body.longURL] };
+	res.render("urls_new");
+});
 
 app.post("/urls", (req, res) => {
 	console.log(req.body); // Log the POST request body to the console
 	res.send("Ok"); // Respond with 'Ok' (we will replace this)
+	// req.body.longURL();
+	urlDatabase[shortURL] = req.body.longURL;
+	console.log(urlDatabase);
+	// adding key to the urlDatabase
 });
 
 app.get("/urls", (req, res) => {
