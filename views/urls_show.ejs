@@ -10,10 +10,14 @@
 </head>
 <body style="font-size:20px; padding:50px;">
     <!-- Add EJS code here -->
-  <h2>These are my URL's</h2>
+   <% include /vagrant/class-Work/w2d2/projectOne/views/partials/_headers.ejs %> 
+   <h1>TinyApp</h1>
+   <a href="">Create New TinyURL</a>
+
+  <h2>TinyURL <%= longURL %></h2>
     <ul>
-    	<li><pre><%= JSON.stringify(shortURL, null, 2) %>
-<a href="">Will be Tiny URL Link</a>
+    	<li><%= shortURL %> 
+
     	</li>
     </ul>
 </body>
