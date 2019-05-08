@@ -20,8 +20,11 @@
     <ul>
     	<% for(let shorturl in urls){ %>
     		<li>
-			<%= shorturl %>
-			<%= urls[shorturl] %>   
+			<strong><%= shorturl %>   
+      </strong> :
+			<%= urls[shorturl] %> 
+      <form method="POST" action="/urls/<%= shorturl %>/delete">  
+      <input type="submit" value="Delete"></form>
 		</li>  	
     	<% } %>
     	
