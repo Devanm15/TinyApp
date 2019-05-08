@@ -12,16 +12,19 @@ var urlDatabase = {
 	"9sm5xK": "http://www.google.com"
 };
 
-app.get("/u/:shortURL", (req, res) => {
-	const longURL = res.redirect(longURL);
-});
-
-app.get("/u/new", (req, res) => {
+app.get("/urls/new", (req, res) => {
 	const longURL = { longURL: urlDatabase[req.body.longURL] };
 	res.render("urls_new");
 });
 
-app.post("/u", (req, res) => {
+//get urls and redirect short
+app.get("/u/:shortURL", (req, res) => {
+	shortURL = req.params.shortURL;
+	longURL = urlDatabase[shortURL];
+	res.redirect(longURL);
+});
+
+app.post("/urls", (req, res) => {
 	const shortURL = generateRandomString(6);
 	console.log(req.body); // Log the POST request body to the console
 	res.redirect(shortURL); // Respond with 'Ok' (we will replace this)
@@ -29,12 +32,12 @@ app.post("/u", (req, res) => {
 	console.log(urlDatabase);
 });
 
-app.get("/u", (req, res) => {
+app.get("/urls", (req, res) => {
 	let templateVars = { urls: urlDatabase };
 	res.render("urls_index", templateVars);
 });
 
-app.get("/u/:shortURL", (req, res) => {
+app.get("/urls/:shortURL", (req, res) => {
 	let templateVars2 = {
 		shortURL: req.params.shortURL,
 		longURL: urlDatabase[req.params.shortURL]
@@ -46,7 +49,7 @@ app.get("/", (req, res) => {
 	res.send("Hello!");
 });
 
-app.get("/u.json", (req, res) => {
+app.get("/urls.json", (req, res) => {
 	res.json(urlDatabase);
 });
 app.get("/hello", (req, res) => {
