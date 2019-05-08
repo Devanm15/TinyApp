@@ -2,17 +2,6 @@ var express = require("express");
 var app = express();
 var PORT = 8080; // default port 8080
 
-function generateRandomString() {
-	str = "";
-	length = 6;
-	characters =
-		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-	for (var i = o; i < str.length; i++) {
-		str = +characters(Math.random() * length);
-	}
-	return str;
-}
-
 app.set("view engine", "ejs");
 
 const bodyParser = require("body-parser");
@@ -29,12 +18,11 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.post("/urls", (req, res) => {
+	const shortURL = generateRandomString(6);
 	console.log(req.body); // Log the POST request body to the console
 	res.send("Ok"); // Respond with 'Ok' (we will replace this)
-	// req.body.longURL();
 	urlDatabase[shortURL] = req.body.longURL;
 	console.log(urlDatabase);
-	// adding key to the urlDatabase
 });
 
 app.get("/urls", (req, res) => {
@@ -60,6 +48,20 @@ app.get("/urls.json", (req, res) => {
 app.get("/hello", (req, res) => {
 	res.send("<html><body>Hello <b>World</b></body></html>\n");
 });
+
+function generateRandomString(length) {
+	var result = "";
+	var characters =
+		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+	var charactersLength = characters.length;
+	for (var i = 0; i < length; i++) {
+		result += characters.charAt(
+			Math.floor(Math.random() * charactersLength)
+		);
+	}
+	return result;
+}
+// generateRandomString(6);
 
 app.listen(PORT, () => {
 	console.log(`Example app listening on port ${PORT}!`);
