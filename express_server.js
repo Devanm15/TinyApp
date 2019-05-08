@@ -20,7 +20,7 @@ app.get("/urls/new", (req, res) => {
 app.post("/urls", (req, res) => {
 	const shortURL = generateRandomString(6);
 	console.log(req.body); // Log the POST request body to the console
-	res.send("Ok"); // Respond with 'Ok' (we will replace this)
+	res.redirect(shortURL); // Respond with 'Ok' (we will replace this)
 	urlDatabase[shortURL] = req.body.longURL;
 	console.log(urlDatabase);
 });
@@ -61,7 +61,6 @@ function generateRandomString(length) {
 	}
 	return result;
 }
-// generateRandomString(6);
 
 app.listen(PORT, () => {
 	console.log(`Example app listening on port ${PORT}!`);
