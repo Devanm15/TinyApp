@@ -11,9 +11,22 @@ app.set("view engine", "ejs");
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
 
-var urlDatabase = {
+const urlDatabase = {
 	b2xVn2: "http://www.lighthouselabs.ca",
 	"9sm5xK": "http://www.google.com"
+};
+
+const users = {
+	userRandomID: {
+		id: "userRandomID",
+		email: "user@example.com",
+		password: "purple-monkey-dinosaur"
+	},
+	user2RandomID: {
+		id: "user2RandomID",
+		email: "user2@example.com",
+		password: "dishwasher-funk"
+	}
 };
 
 app.post("/login", function(req, res) {
@@ -21,6 +34,14 @@ app.post("/login", function(req, res) {
 	res.cookie("name", username);
 	res.redirect("/urls/new");
 	console.log(res.cookies);
+});
+
+app.get("/register", (req, res) => {
+	let templateVars4 = {
+		email: users[req.body.email],
+		password: users[req.body.password]
+	};
+	res.render("urls_registration", templateVars4);
 });
 
 app.get("/urls/new", (req, res) => {
@@ -45,17 +66,23 @@ app.get("/urls", (req, res) => {
 		username: name,
 		urls: urlDatabase
 	};
-	console.log(urlDatabase);
-	console.log(templateVars2);
-	console.log(name);
 	res.render("urls_index", templateVars2);
+});
+
+app.post("/register", (req, res) => {
+	const clientID = generateRandomString(4);
+	users[clientID] = {
+		id: clientID,
+		email: req.body.email,
+		password: req.body.pasword
+	};
+	console.log(users);
+	res.render("urls_registration");
 });
 
 app.post("/urls", (req, res) => {
 	const shortURL = generateRandomString(6);
-	// console.log(req.body); // Log the POST request body to the console
 	urlDatabase[shortURL] = req.body.longURL;
-	// console.log(urlDatabase);
 	res.redirect("/urls");
 });
 
@@ -77,7 +104,6 @@ app.get("/urls/:shortURL", (req, res) => {
 		shortURL: req.params.shortURL,
 		longURL: urlDatabase[req.params.shortURL]
 	};
-
 	res.render("urls_show", templateVars3);
 });
 
@@ -85,12 +111,6 @@ app.post("/logout", function(req, res) {
 	res.clearCookie("name");
 	res.redirect("/urls/new");
 });
-
-// app.get("/logout", function(req, res) {
-// 	let username = res.clearCookies("name", "username");
-// 	delete username;
-// 	res.redirect("/login");
-// });
 
 // app.get("/", (req, res) => {
 // 	res.send("Hello!");
