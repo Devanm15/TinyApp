@@ -76,7 +76,7 @@ app.post("/register", (req, res) => {
 		email: req.body.email,
 		password: req.body.pasword
 	};
-	console.log(users);
+	res.cookie("user_id", clientID);
 	res.render("urls_registration");
 });
 
