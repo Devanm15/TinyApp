@@ -9,12 +9,12 @@
 
     <title>New URL - TinyApp Example</title>
   </head>
-
+<%- include("/vagrant/class-Work/w2d2/projectOne/views/partials/_headers.ejs", username) %>
   <body style="font-size:20px; padding:50px;">
 
-    <% include /vagrant/class-Work/w2d2/projectOne/views/partials/_headers.ejs %>
-
     <h3>Create TinyURL</h3>
+    
+    
     <form class="form-inline" action="/urls" method="POST">
       <div class="form-group mb-2">
         <label for="longURL">Enter a URL:</label>
