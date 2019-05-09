@@ -17,15 +17,22 @@
     <!-- Add EJS code here -->
     <% include /vagrant/class-Work/w2d2/projectOne/views/partials/_headers.ejs %>
     <h2>My URLs</h2>
+
     <ul>
     	<% for(let shorturl in urls){ %>
     		<li>
+
 			<strong><%= shorturl %>   
       </strong> :
 			<%= urls[shorturl] %> 
       <form method="POST" action="/urls/<%= shorturl %>/delete">  
-      <input type="submit" value="Delete"></form>
-		</li>  	
+        <input type="submit" value="Delete">
+      </form>
+      <a href="/urls/<%=shorturl%>" class="btn btn-primary">Edit</a>
+
+        
+
+		</li>  
     	<% } %>
     	
     </ul>
