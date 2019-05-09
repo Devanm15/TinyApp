@@ -1,5 +1,9 @@
 var express = require("express");
+var cookieParser = require("cookie-parser");
+
 var app = express();
+app.use(cookieParser());
+
 var PORT = 8080; // default port 8080
 
 app.set("view engine", "ejs");
@@ -55,6 +59,18 @@ app.get("/urls/:shortURL", (req, res) => {
 	};
 	res.render("urls_show", templateVars2);
 });
+app.post("/login", function(req, res) {
+	res.cookie("name", "Devan");
+	res.redirect("/urls");
+});
+
+// app.get("/urls/login", function(req, res) {
+// 	username = res.cookie("name", "Devan");
+// 	res.redirect("/urls");
+
+// signed cookies
+// console.log("Signed Cookies: ", req.signedCookies);
+// });
 
 // app.get("/", (req, res) => {
 // 	res.send("Hello!");
