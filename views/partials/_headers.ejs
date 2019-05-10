@@ -4,16 +4,16 @@
 </head>
 
 <body>
-<% if(!username ){ %>
-<label for="username">Username:</label>
-<form method="POST" action="/login">
-	<input type="text" name="username">
-	<button type="submit">Log in</button>
-</form>
+
+<h1>TinyApp</h1>
+
+<% if(!user_id){ %>
+<a href="/register">Register / </a>
+<a href="/login">Login</a>
 <% } %>
 
-<% if (username){ %>
-	Logged in as : <%= username %>
+<% if (users_id){ %>
+	Logged in as : <%= user.email %>
 	<form method="POST" action="/logout">
 		<button type="submit">Logout</button>
 </form>
@@ -22,7 +22,4 @@
 </html>
 
 
-<!-- if() -->
 
-
-<!-- <p><%= username %></p> -->
