@@ -56,6 +56,7 @@ app.post("/login", function(req, res) {
 
 app.get("/login", function(req, res) {
 	let input = {
+		user: {},
 		email: users[req.body.email],
 		password: users[req.body.Password]
 	};
@@ -64,6 +65,7 @@ app.get("/login", function(req, res) {
 
 app.get("/register", (req, res) => {
 	let templateVars4 = {
+		user: {},
 		email: users[req.body.email],
 		password: users[req.body.password]
 	};
@@ -88,12 +90,10 @@ app.get("/u/:shortURL", (req, res) => {
 
 app.get("/urls", (req, res) => {
 	let user_id = req.cookies["user_id"];
-	console.log(req.cookies);
 	let templateVars2 = {
-		user: users[user_id],
+		user: users[user_id] || {},
 		urls: urlDatabase
 	};
-	console.log(templateVars2.user);
 	res.render("urls_index", templateVars2);
 });
 
@@ -149,7 +149,7 @@ app.get("/urls/:shortURL", (req, res) => {
 
 app.post("/logout", function(req, res) {
 	res.clearCookie("user_id");
-	res.redirect("/urls/new");
+	res.redirect("/login");
 });
 
 // app.get("/", (req, res) => {

@@ -7,12 +7,12 @@
 
 <h1>TinyApp</h1>
 
-<% if(!user_id){ %>
+<% if(!user.id){ %>
 <a href="/register">Register / </a>
 <a href="/login">Login</a>
 <% } %>
 
-<% if (users_id){ %>
+<% if (user.id){ %>
 	Logged in as : <%= user.email %>
 	<form method="POST" action="/logout">
 		<button type="submit">Logout</button>
