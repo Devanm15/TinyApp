@@ -32,8 +32,6 @@ const users = {
 app.post("/login", function(req, res) {
 	const email = req.body.email;
 	const password = req.body.password;
-	console.log(email);
-	console.log(password);
 	if (email === "" || password === "") {
 		res.status(403).send("Email or Password cannot be blank");
 		return;
@@ -64,12 +62,12 @@ app.get("/login", function(req, res) {
 });
 
 app.get("/register", (req, res) => {
-	let templateVars4 = {
+	let templateVars = {
 		user: {},
 		email: users[req.body.email],
 		password: users[req.body.password]
 	};
-	res.render("urls_registration", templateVars4);
+	res.render("urls_registration", templateVars);
 });
 
 app.get("/urls/new", (req, res) => {
@@ -86,6 +84,7 @@ app.get("/urls/new", (req, res) => {
 
 //get urls and redirect short
 app.get("/u/:shortURL", (req, res) => {
+	let user_id = req.cookies["user_id"];
 	shortURL = req.params.shortURL;
 	longURL = urlDatabase[shortURL];
 	res.redirect(longURL);
@@ -93,11 +92,11 @@ app.get("/u/:shortURL", (req, res) => {
 
 app.get("/urls", (req, res) => {
 	let user_id = req.cookies["user_id"];
-	let templateVars2 = {
+	let templateVars = {
 		user: users[user_id] || {},
 		urls: urlDatabase
 	};
-	res.render("urls_index", templateVars2);
+	res.render("urls_index", templateVars);
 });
 
 app.post("/register", (req, res) => {
@@ -130,9 +129,13 @@ app.post("/urls", (req, res) => {
 });
 
 app.post("/urls/:short/delete", (req, res) => {
+	let user_id = req.cookies["user_id"];
 	const short = req.params.short;
 	delete urlDatabase[short];
-	res.redirect("/urls");
+	if (user_id) {
+		return res.redirect("/urls");
+	}
+	res.redirect("login");
 });
 
 app.post("/urls/:someID", (req, res) => {
@@ -142,12 +145,15 @@ app.post("/urls/:someID", (req, res) => {
 
 app.get("/urls/:shortURL", (req, res) => {
 	let user_id = req.cookies["user_id"];
-	let templateVars3 = {
+	let templateVars = {
 		user: users[user_id] || {},
 		shortURL: req.params.shortURL,
 		longURL: urlDatabase[req.params.shortURL]
 	};
-	res.render("urls_show", templateVars3);
+	if (user_id) {
+		return res.render("urls_new", templateVars);
+	}
+	res.redirect("/login");
 });
 
 app.post("/logout", function(req, res) {
