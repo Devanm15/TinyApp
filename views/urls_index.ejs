@@ -11,38 +11,39 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
   <title>TinyApp</title>
 </head>
-<body style="font-size:20px; padding:50px;">
+<!-- <body style="font-size:20px; padding:50px;"> -->
 
   
   <% include ./partials/_headers.ejs %>
 	
  
     <!-- Add EJS code here -->
-    <a href="/urls/new">Make a New Url</a>
+    <!-- <a href="/urls/new">Make a New Url</a> -->
 
-
-    	<% for(let shorturl in urls){ %>
-    		
-<% if(urls[shorturl].userID === user){ %>
 <h2>My URLs</h2>
 <a href="/urls/new">Make a New Url</a>
-    <ul>
+    	<ul>
+      <% for(let shorturl in urls){ %>
+    		
+<% if(user && urls[shorturl].userID === user.id){ %>
+    
 <li>
 			<strong><%= shorturl %>   
       </strong> :
 			<%= urls[shorturl].longURL %> 
-      <%= urls[shorturl].userID %>
+
       <form method="POST" action="/urls/<%= shorturl %>/delete">  
         <input type="submit" value="Delete">
       </form>
       <a href="/urls/<%=shorturl%>" class="btn btn-primary">Edit</a>
         </li> 
+        
 <% } %>
         
 
 	 
     	<% } %>
+      </ul>
     	
-    </ul>
-</body>
+    </body>
 </html>

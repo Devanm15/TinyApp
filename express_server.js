@@ -143,7 +143,7 @@ app.post("/urls/:short/delete", (req, res) => {
 });
 
 app.post("/urls/:someID", (req, res) => {
-	urlDatabase[req.params.someID] = req.body.longURL;
+	urlDatabase[req.params.someID].longURL = req.body.longURL;
 	res.redirect("/urls");
 });
 
@@ -152,10 +152,10 @@ app.get("/urls/:shortURL", (req, res) => {
 	let templateVars = {
 		user: users[user_id] || {},
 		shortURL: req.params.shortURL,
-		longURL: urlDatabase[req.params.shortURL]
+		longURL: urlDatabase[req.params.shortURL].longURL
 	};
 	if (user_id) {
-		return res.render("urls_new", templateVars);
+		return res.render("urls_show", templateVars);
 	}
 	res.redirect("/login");
 });
@@ -164,16 +164,6 @@ app.post("/logout", function(req, res) {
 	res.clearCookie("user_id");
 	res.redirect("/login");
 });
-
-// app.get("/", (req, res) => {
-// 	res.send("Hello!");
-
-// app.get("/urls.json", (req, res) => {
-// 	res.json(urlDatabase);
-// });
-// app.get("/hello", (req, res) => {
-// 	res.send("<html><body>Hello <b>World</b></body></html>\n");
-// });
 
 function generateRandomString(length) {
 	var result = "";
