@@ -12,8 +12,8 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const urlDatabase = {
-	b2xVn2: "http://www.lighthouselabs.ca",
-	"9sm5xK": "http://www.google.com"
+	b6UTxQ: { longURL: "https://www.tsn.ca", userID: "aJ48lW" },
+	i3BoGr: { longURL: "https://www.google.ca", userID: "aJ48lW" }
 };
 
 const users = {
@@ -48,7 +48,7 @@ app.post("/login", function(req, res) {
 		);
 	} else {
 		res.cookie("user_id", user.id);
-		res.redirect("/urls/new");
+		res.redirect("/urls");
 	}
 });
 
@@ -124,7 +124,11 @@ app.post("/register", (req, res) => {
 app.post("/urls", (req, res) => {
 	let user = req.cookies["user_id"];
 	const shortURL = generateRandomString(6);
-	urlDatabase[shortURL] = req.body.longURL;
+	let newURL = {
+		longURL: req.body.longURL,
+		userID: req.cookies["user_id"]
+	};
+	urlDatabase[shortURL] = newURL;
 	res.redirect("/urls");
 });
 

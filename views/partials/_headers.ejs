@@ -1,6 +1,21 @@
 <!DOCTYPE html>
 <head>
 	<title>This is my partial _header</title>
+
+	 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+<style type="text/css">
+Body{
+	margin:15px 0px; padding:20px;
+	text-align:left;
+    align:center;
+}
+.container {
+  width: 200px;
+  clear: both;
+  margin: 15px 0px; padding:20px;
+}
+
+</style>
 </head>
 
 <body>
@@ -8,15 +23,16 @@
 <h1>TinyApp</h1>
 
 <% if(!user.id){ %>
-<a href="/register">Register / </a>
-<a href="/login">Login</a>
+<div class="container">
+<strong><a href="/register">Register / </a></strong>
+<strong><a href="/login">Login</a></strong>
 <% } %>
 
 <% if (user.id){ %>
 	Logged in as : <%= user.email %>
 	<form method="POST" action="/logout">
 		<button type="submit">Logout</button>
-</form>
+</form></div>
 <% } %>
 </body>
 </html>

@@ -18,24 +18,29 @@
 	
  
     <!-- Add EJS code here -->
-    
-    <h2>My URLs</h2>
+    <a href="/urls/new">Make a New Url</a>
 
-    <ul>
+
     	<% for(let shorturl in urls){ %>
-    		<li>
-
+    		
+<% if(urls[shorturl].userID === user){ %>
+<h2>My URLs</h2>
+<a href="/urls/new">Make a New Url</a>
+    <ul>
+<li>
 			<strong><%= shorturl %>   
       </strong> :
-			<%= urls[shorturl] %> 
+			<%= urls[shorturl].longURL %> 
+      <%= urls[shorturl].userID %>
       <form method="POST" action="/urls/<%= shorturl %>/delete">  
         <input type="submit" value="Delete">
       </form>
       <a href="/urls/<%=shorturl%>" class="btn btn-primary">Edit</a>
-
+        </li> 
+<% } %>
         
 
-		</li>  
+	 
     	<% } %>
     	
     </ul>
