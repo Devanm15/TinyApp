@@ -75,10 +75,13 @@ app.get("/register", (req, res) => {
 app.get("/urls/new", (req, res) => {
 	let user_id = req.cookies["user_id"];
 	let templateVars = {
-		user: users[user_id],
+		user: users[user_id] || {},
 		longURL: urlDatabase[req.body.longURL]
 	};
-	res.render("urls_new", templateVars);
+	if (user_id) {
+		return res.render("urls_new", templateVars);
+	}
+	res.redirect("/login");
 });
 
 //get urls and redirect short
@@ -140,7 +143,7 @@ app.post("/urls/:someID", (req, res) => {
 app.get("/urls/:shortURL", (req, res) => {
 	let user_id = req.cookies["user_id"];
 	let templateVars3 = {
-		user: users[user_id],
+		user: users[user_id] || {},
 		shortURL: req.params.shortURL,
 		longURL: urlDatabase[req.params.shortURL]
 	};
