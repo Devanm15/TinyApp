@@ -25,7 +25,7 @@ const users = {
 	user2RandomID: {
 		id: "user2RandomID",
 		email: "user2@example.com",
-		password: "dishwasher-funk"
+		password: "1234"
 	}
 };
 
@@ -94,7 +94,7 @@ app.get("/urls", (req, res) => {
 	let user_id = req.cookies["user_id"];
 	let templateVars = {
 		user: users[user_id] || {},
-		urls: urlDatabase
+		urls: urlsForUser(user_id)
 	};
 	res.render("urls_index", templateVars);
 });
@@ -176,6 +176,16 @@ function generateRandomString(length) {
 		);
 	}
 	return result;
+}
+
+function urlsForUser(id) {
+	obj = {};
+	for (key in urlDatabase) {
+		if (id === urlDatabase[key].userID) {
+			obj[key] = urlDatabase[key];
+		}
+	}
+	return obj;
 }
 
 app.listen(PORT, () => {
