@@ -1,9 +1,13 @@
 var express = require("express");
-var cookieParser = require("cookie-parser");
+var cookieSession = require("cookie-session");
 const bcrypt = require("bcrypt");
 
 var app = express();
-app.use(cookieParser());
+app.use(
+	cookieSession({
+		keys: ["mashpotatoes"]
+	})
+);
 
 var PORT = 8080; // default port 8080
 
@@ -48,7 +52,7 @@ app.post("/login", function(req, res) {
 			"Not a valid email or password, please try again or register"
 		);
 	} else {
-		res.cookie("user_id", user.id);
+		req.session.user_id = user.id;
 		res.redirect("/urls");
 	}
 });
@@ -72,7 +76,7 @@ app.get("/register", (req, res) => {
 });
 
 app.get("/urls/new", (req, res) => {
-	let user_id = req.cookies["user_id"];
+	let user_id = req.session["user_id"];
 	let templateVars = {
 		user: users[user_id] || {},
 		longURL: urlDatabase[req.body.longURL]
@@ -88,7 +92,7 @@ app.get("/u/:shortURL", (req, res) => {
 	if (!urlDatabase[req.params.shortURL]) {
 		res.status(403).send("Not a valid short URL");
 	} else {
-		let user_id = req.cookies["user_id"];
+		let user_id = req.Session["user_id"];
 		shortURL = req.params.shortURL;
 		longURL = urlDatabase[shortURL].longURL;
 		res.redirect(longURL);
@@ -96,7 +100,7 @@ app.get("/u/:shortURL", (req, res) => {
 });
 
 app.get("/urls", (req, res) => {
-	let user_id = req.cookies["user_id"];
+	let user_id = req.session["user_id"];
 	let templateVars = {
 		user: users[user_id] || {},
 		urls: urlsForUser(user_id)
@@ -122,25 +126,25 @@ app.post("/register", (req, res) => {
 				email: req.body.email,
 				password: hashedPassword
 			};
-			res.cookie("user_id", clientID);
+			res.session("user_id", clientID);
 		}
 	}
 	res.redirect("/urls");
 });
 
 app.post("/urls", (req, res) => {
-	let user = req.cookies["user_id"];
+	let user = req.session["user_id"];
 	const shortURL = generateRandomString(6);
 	let newURL = {
 		longURL: req.body.longURL,
-		userID: req.cookies["user_id"]
+		userID: req.session["user_id"]
 	};
 	urlDatabase[shortURL] = newURL;
 	res.redirect("/urls");
 });
 
 app.post("/urls/:short/delete", (req, res) => {
-	let user_id = req.cookies["user_id"];
+	let user_id = req.session["user_id"];
 	const short = req.params.short;
 	delete urlDatabase[short];
 	if (user_id) {
@@ -159,7 +163,7 @@ app.post("/urls/:someID", (req, res) => {
 });
 
 app.get("/urls/:shortURL", (req, res) => {
-	let user_id = req.cookies["user_id"];
+	let user_id = req.session["user_id"];
 	if (!urlDatabase[req.params.shortURL]) {
 		res.status(403).send("Not a valid short URL");
 	} else {
@@ -176,7 +180,7 @@ app.get("/urls/:shortURL", (req, res) => {
 });
 
 app.post("/logout", function(req, res) {
-	res.clearCookie("user_id");
+	req.session = null;
 	res.redirect("/login");
 });
 
