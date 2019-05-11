@@ -84,10 +84,14 @@ app.get("/urls/new", (req, res) => {
 
 //get urls and redirect short
 app.get("/u/:shortURL", (req, res) => {
-	let user_id = req.cookies["user_id"];
-	shortURL = req.params.shortURL;
-	longURL = urlDatabase[shortURL];
-	res.redirect(longURL);
+	if (!urlDatabase[req.params.shortURL]) {
+		res.status(403).send("Not a valid short URL");
+	} else {
+		let user_id = req.cookies["user_id"];
+		shortURL = req.params.shortURL;
+		longURL = urlDatabase[shortURL].longURL;
+		res.redirect(longURL);
+	}
 });
 
 app.get("/urls", (req, res) => {
@@ -143,21 +147,29 @@ app.post("/urls/:short/delete", (req, res) => {
 });
 
 app.post("/urls/:someID", (req, res) => {
-	urlDatabase[req.params.someID].longURL = req.body.longURL;
-	res.redirect("/urls");
+	if (!urlDatabase[req.params.someID]) {
+		res.status(403).send("Not a valid short URL");
+	} else {
+		urlDatabase[req.params.someID].longURL = req.body.longURL;
+		res.redirect("/urls");
+	}
 });
 
 app.get("/urls/:shortURL", (req, res) => {
 	let user_id = req.cookies["user_id"];
-	let templateVars = {
-		user: users[user_id] || {},
-		shortURL: req.params.shortURL,
-		longURL: urlDatabase[req.params.shortURL].longURL
-	};
-	if (user_id) {
-		return res.render("urls_show", templateVars);
+	if (!urlDatabase[req.params.shortURL]) {
+		res.status(403).send("Not a valid short URL");
+	} else {
+		let templateVars = {
+			user: users[user_id] || {},
+			shortURL: req.params.shortURL,
+			longURL: urlDatabase[req.params.shortURL].longURL
+		};
+		if (user_id) {
+			return res.render("urls_show", templateVars);
+		}
+		res.redirect("/login");
 	}
-	res.redirect("/login");
 });
 
 app.post("/logout", function(req, res) {
