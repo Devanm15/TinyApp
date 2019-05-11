@@ -1,5 +1,6 @@
 var express = require("express");
 var cookieParser = require("cookie-parser");
+const bcrypt = require("bcrypt");
 
 var app = express();
 app.use(cookieParser());
@@ -20,12 +21,12 @@ const users = {
 	userRandomID: {
 		id: "userRandomID",
 		email: "user@example.com",
-		password: "purple-monkey-dinosaur"
+		password: bcrypt.hashSync("purple-monkey-dinosaur", 10)
 	},
 	user2RandomID: {
 		id: "user2RandomID",
 		email: "user2@example.com",
-		password: "1234"
+		password: bcrypt.hashSync("1234", 10)
 	}
 };
 
@@ -42,7 +43,7 @@ app.post("/login", function(req, res) {
 			user = users[key];
 		}
 	}
-	if (password !== user.password) {
+	if (!bcrypt.compareSync(password, users[key].password)) {
 		res.status(403).send(
 			"Not a valid email or password, please try again or register"
 		);
@@ -56,7 +57,7 @@ app.get("/login", function(req, res) {
 	let input = {
 		user: {},
 		email: users[req.body.email],
-		password: users[req.body.Password]
+		password: users[req.body.password]
 	};
 	res.render("urls_login", input);
 });
@@ -113,11 +114,13 @@ app.post("/register", (req, res) => {
 			res.status(400).send("This email already exists");
 			return;
 		} else {
+			const password = req.body.password;
+			const hashedPassword = bcrypt.hashSync(password, 10);
 			let clientID = generateRandomString(4);
 			users[clientID] = {
 				id: clientID,
 				email: req.body.email,
-				password: req.body.pasword
+				password: hashedPassword
 			};
 			res.cookie("user_id", clientID);
 		}
