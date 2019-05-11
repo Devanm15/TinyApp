@@ -9,7 +9,7 @@ app.use(
   })
 );
 
-var PORT = 8080; // default port 8080
+var PORT = 8080;
 
 app.set("view engine", "ejs");
 
@@ -87,16 +87,15 @@ app.get("/urls/new", (req, res) => {
   res.redirect("/login");
 });
 
-//get urls and redirect short
 app.get("/u/:shortURL", (req, res) => {
   let user_id = req.session["user_id"];
   shortURL = req.params.shortURL;
-  longURL = urlDatabase[shortURL];
-  res.redirect(longURL);
-  if (user_id) {
-    return res.redirect("/urls");
+  longURL = urlDatabase[shortURL].longURL;
+  if (!longURL) {
+    res.status(403).send("Not a valid short URL");
+  } else {
+    res.redirect(longURL);
   }
-  res.redirect("login");
 });
 
 app.get("/urls", (req, res) => {
